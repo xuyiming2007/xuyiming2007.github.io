@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人博客 - 所有文章</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --gray: #95a5a6;
+            --light-gray: #ecf0f1;
+            --white: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--secondary);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .nav {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu li a {
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .page-header {
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-desc {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .filter-area {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background-color: var(--secondary);
+            color: var(--white);
+            border-color: var(--secondary);
+        }
+
+        .filter-btn:hover:not(.active) {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-meta-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .article-category {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .article-date {
+            color: var(--gray);
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-excerpt {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-meta-bottom {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .article-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background-color: var(--secondary);
+            color: var(--white);
+            border-color: var(--secondary);
+        }
+
+        .page-number {
+            width: 2.5rem;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-number.active {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+
+        .page-number:hover:not(.active) {
+            background-color: var(--light-gray);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .hot-article-list li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--light-gray);
+        }
+
+        .hot-article-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .category-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            align-items: center;
+        }
+
+        .category-count {
+            background-color: var(--light-gray);
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        .footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-record {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .filter-area {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container nav-container">
+            <div class="logo">我的<span>博客</span></div>
+            <ul class="nav-menu">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="博客列表页.html" style="color: var(--secondary);">博客</a></li>
+                <li><a href="我的.html">关于我</a></li>
+                <li><a href="作品.html">作品</a></li>
+            </ul>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="page-header">
+            <h1 class="page-title">我的战绩</h1>
+            <p class="page-desc">人生没有那么多坎坷，我们要勇敢的去面对</p>
+        </section>
+
+        <section class="filter-area">
+            <div class="filter-label">分类：</div>
+            <div class="filter-group category-filter">
+                <button class="filter-btn active">瓦</button>
+                <button class="filter-btn">篮球</button>
+                <button class="filter-btn">睡觉</button>
+                <button class="filter-btn">拍风景</button>
+                <button class="filter-btn">生活</button>
+            </div>
+
+            <div class="filter-label">标签：</div>
+            <div class="filter-group tag-filter">
+                <button class="filter-btn active">山重水复疑无路，柳暗花明又一村</button>
+                <button class="filter-btn">html</button>
+                <button class="filter-btn">CSS</button>
+                <button class="filter-btn">React</button>
+                <button class="filter-btn">生活</button>
+                <button class="filter-btn">读书</button>
+            </div>
+        </section>
+
+        <div class="main-content">
+            <div class="article-list">
+                <article class="article-card">
+                    <div class="article-meta-top">
+                        <span class="article-category">无畏契约</span>
+                        <span class="article-date"><i class="far fa-calendar"></i> 瓦学弟</span>
+                    </div>
+                    <h2 class="article-title"><a href="#">无畏契约是一款射击游戏</a></h2>
+                    <p class="article-excerpt">本文详细的解说这款游戏，核心类型：5v5战术射击+英雄技能，兼顾枪法与策略。
+• 核心模式：爆破模式，进攻方安“爆能器”并守至爆炸；防守方阻止安装或拆除，先赢13回合胜。
+• 特工系统：分决斗者、先锋、控场者、守卫四类，各有独特技能与终极技能，需用局内经济购买/充能。
+• 武器与经济：手枪、步枪、狙击枪等，按回合胜负与击杀获取金钱购买武器与技能。</p>
+                    <div class="article-meta-bottom">
+                        <div class="article-stats"><i class="far fa-eye"></i> 1314</div>
+                        <div class="article-stats"><i class="far fa-comment"></i> 520</div>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-meta-top">
+                        <span class="article-category">和平精英</span>
+                        <span class="article-date"><i class="far fa-calendar"></i> 小学生</span>
+                    </div>
+                    <h2 class="article-title"><a href="#"></a>移动端战术竞技射击（大逃杀）游戏</h2>
+                    <p class="article-excerpt">类型：战术竞技/FPS/大逃杀，支持Android/iOS，虚幻4引擎开发￼￼￼。
+
+• 核心模式：经典大逃杀——百人跳伞落地，搜装备、缩圈对抗，活到最后为胜；可单/双/四人组队，支持第三人称（默认）与第一人称视角。
+
+• 其他玩法：团队竞技（4v4练枪）、创意工坊（超体对抗、火力对决等）、地铁逃生（高风险撤离）、娱乐模式（极速对决等）。
+
+• 核心体验：融合跳伞落点选择+物资搜集+载具转移+缩圈运营+射击对抗，强调整体战术与团队配合。</p>
+                    <div class="article-meta-bottom">
+                        <div class="article-stats"><i class="far fa-eye"></i> 54188</div>
+                        <div class="article-stats"><i class="far fa-comment"></i> 520</div>
+                    </div>
+                </article>
+                <article class="article-card">
+                    <div class="article-meta-top">
+                        <span class="article-category">王牌竞速</span>
+                        <span class="article-date"><i class="far fa-calendar"></i> 黄牌竞速</span>
+                    </div>
+                    <h2 class="article-title"><a href="#">移动端写实风格创新赛车竞速手游</a></h2>
+                    <p class="article-excerpt"> 类型标签：赛车竞速/休闲竞技/技能竞速，支持Android/iOS，2021年上线￼￼￼。
+
+• 核心玩法：每车有专属王牌大招（加速、干扰、辅助等），漂移攒氮气充能，比赛兼顾操作与技能释放时机；单局约1分钟，节奏快。
+
+• 模式丰富：包含排位赛、组队赛、闯关模式（金币/倒计时/积分）、生涯剧情等。
+
+• 赛车与改装：100+授权真车与概念车，支持涂装、轮毂等DIY，可升级引擎/轮胎提升性能。
+
+• 实景赛道：西湖、天门山、洪崖洞等中外地标赛道，视觉沉浸感强。</p>
+                    <div class="article-meta-bottom">
+                        <div class="article-stats"><i class="far fa-eye"></i> 1314</div>
+                        <div class="article-stats"><i class="far fa-comment"></i> 520</div>
+                    </div>
+                </article>
+                <article class="article-card">
+                    <div class="article-meta-top">
+                        <span class="article-category">消消乐</span>
+                        <span class="article-date"><i class="far fa-calendar"></i> 消掉不开心</span>
+                    </div>
+                    <h2 class="article-title"><a href="#"></a>移动端休闲消除类益智游戏</h2>
+                    <p class="article-excerpt">类型标签：休闲消除/益智闯关/轻量级手游，支持Android/iOS双平台。
+
+• 核心玩法：在限定步数或时间内，消除指定数量的目标元素（如小动物、水果），或达到对应分数、清除障碍物。
+
+• 关卡设计：包含数千个差异化关卡，随进度解锁特效道具（如火箭、炸弹）和特殊障碍（如冰块、藤蔓），提升游戏趣味性。
+
+• 操作特点：点击或滑动屏幕即可完成操作，规则简单易上手，碎片化时间即可游玩。
+
+• 社交属性：支持好友排行榜比拼、赠送体力，部分版本可邀请好友助力过关。</p>
+                    <div class="article-meta-bottom">
+                        <div class="article-stats"><i class="far fa-eye"></i> 520</div>
+                        <div class="article-stats"><i class="far fa-comment"></i> 1314</div>
+                    </div>
+                </article>
+            </div>
+
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">热门游戏</h3>
+                    <ul class="hot-article-list">
+                        <li><a href="#">无畏契约</a></li>
+                        <li><a href="#">pubg</a></li>
+                        <li><a href="#">和平精英</a></li>
+                        <li><a href="#">消消乐</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">游戏的喜欢</h3>
+                    <div class="category-list">
+                        <div class="category-stat">
+                            <span>无畏契约</span>
+                            <span class="category-count">520</span>
+                        </div>
+                        <div class="category-stat">
+                            <span>和平精英</span>
+                            <span class="category-count">520</span>
+                        </div>
+                        <div class="category-stat">
+                            <span>消消乐</span>
+                            <span class="category-count">520</span>
+                        </div>
+                        <div class="category-stat">
+                            <span>pubg</span>
+                            <span class="category-count">520</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <section class="pagination">
+            <button class="page-btn" disabled><i class="fas fa-chevron-left"></i> 上一页</button>
+            <div class="page-number active">1</div>
+            <div class="page-number">2</div>
+            <div class="page-number">3</div>
+            <button class="page-btn">下一页 <i class="fas fa-chevron-right"></i></button>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p class="footer-copyright">© 2026 许益铭 版权所有</p>
+            <p class="footer-record">粤ICP备12345678号-1</p>
+        </div>
+    </footer>
+
+    <script>
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const parentGroup = btn.closest('.filter-group');
+                parentGroup.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        const pageNumbers = document.querySelectorAll('.page-number');
+        pageNumbers.forEach(num => {
+            num.addEventListener('click', () => {
+                pageNumbers.forEach(n => n.classList.remove('active'));
+                num.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

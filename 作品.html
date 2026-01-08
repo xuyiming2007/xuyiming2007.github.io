@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品集 | 个人博客</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-2;
+            }
+            .nav-active {
+                @apply border-b-2 border-indigo-500 text-indigo-600;
+            }
+        }
+        #backToTop {
+            @apply fixed bottom-8 right-8 bg-indigo-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300;
+        }
+        #backToTop.show {
+            @apply opacity-100 visible;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5', 
+                        secondary: '#6B7280',
+                        light: '#F9FAFB',
+                        dark: '#111827',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Microsoft YaHei', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+    <header class="sticky top-0 bg-white shadow-sm z-50">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-bold text-primary">Ming</a>
+            <ul class="hidden md:flex space-x-8">
+                <li><a href="index.html" class="py-2">首页</a></li>
+                <li><a href="博客列表页.html" class="py-2 ">博客</a></li>
+                <li><a href="我的.html" class="py-2">我的</a></li>
+                <li><a href="作品.html" class="py-2 nav-active">作品</a></li>
+            </ul>
+            <button id="menuBtn" class="md:hidden text-dark text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div id="mobileMenu" class="fixed inset-0 bg-white z-60 transform translate-x-full transition-transform duration-300 md:hidden">
+                <div class="flex justify-end p-4">
+                    <button id="closeMenu" class="text-dark text-xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <ul class="flex flex-col items-center space-y-6 mt-10 text-xl">
+                    <li><a href="index.html" class="py-2">首页</a></li>
+                    <li><a href="博客.html" class="py-2 nav-active">博客</a></li>
+                    <li><a href="关于我的.html" class="py-2">我的</a></li>
+                    <li><a href="作品.html" class="py-2">作品</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-10">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                <h2 class="text-3xl font-bold mb-4 md:mb-0">我的战绩</h2>
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="searchInput" placeholder="搜索项目/技术栈..." class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button class="filter-btn active px-4 py-2 bg-primary text-white rounded-full text-sm" data-filter="all">全部项目</button>
+                <button class="filter-btn px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-sm" data-filter="web">吃鸡</button>
+                <button class="filter-btn px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-sm" data-filter="mobile">瓦学弟</button>
+                <button class="filter-btn px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-sm" data-filter="design">消消乐</button>
+            </div>
+
+            <div class="flex items-center gap-4 mb-6">
+                <span class="text-sm text-gray-500">技术</span>
+                <select id="techFilter" class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    <option value="all">技术</option>
+                    <option value="html">瓦学弟</option>
+                    <option value="vue">G学长</option>
+                    <option value="react">牛逼</option>
+                    <option value="js">许益铭</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="projectGrid">
+            <div class="project-card bg-white rounded-xl shadow p-6 card-hover" data-category="web design" data-tech="html vue">
+                <div class="h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                    <img src="5bd59e338d33b60aad96fde8dcdecfbf.png" alt="和平精英" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-semibold mb-2">和平精英</h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">• 类型：战术竞技/FPS/大逃杀，支持Android/iOS，虚幻4引擎开发￼￼￼。
+
+• 核心模式：经典大逃杀——百人跳伞落地，搜装备、缩圈对抗，活到最后为胜；可单/双/四人组队，支持第三人称（默认）与第一人称视角。
+
+• 其他玩法：团队竞技（4v4练枪）、创意工坊（超体对抗、火力对决等）、地铁逃生（高风险撤离）、娱乐模式（极速对决等）。
+
+• 核心体验：融合跳伞落点选择+物资搜集+载具转移+缩圈运营+射击对抗，强调整体战术与团队配合。</p>
+
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">射击</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">团队</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">思路</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="https://demo.company.com" target="_blank" class="text-sm text-primary hover:underline"><i class="fas fa-external-link mr-1"></i> 在线演示</a>
+                        <a href="https://github.com/company-site" target="_blank" class="text-sm text-primary hover:underline"><i class="fab fa-github mr-1"></i> GitHub源码</a>
+                    </div>
+                    <button class="detail-btn text-sm text-gray-500 hover:text-primary" data-id="1"><i class="fas fa-info-circle mr-1"></i> 详情</button>
+                </div>
+            </div>
+
+            <div class="project-card bg-white rounded-xl shadow p-6 card-hover" data-category="mobile" data-tech="vue js">
+                <div class="h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                    <img src="2da32dd481e49ecb3611716f3f4c2d92.png" alt="无畏契约" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-semibold mb-2">无畏契约</h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">• 核心模式：爆破模式，进攻方安“爆能器”并守至爆炸；防守方阻止安装或拆除，先赢13回合胜。
+
+• 特工系统：分决斗者、先锋、控场者、守卫四类，各有独特技能与终极技能，需用局内经济购买/充能。
+
+• 武器与经济：手枪、步枪、狙击枪等，按回合胜负与击杀获取金钱购买武器与技能。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">不死鸟</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">奶妈</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">捷风</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="https://demo.newsapp.com" target="_blank" class="text-sm text-primary hover:underline"><i class="fas fa-external-link mr-1"></i> 在线演示</a>
+                        <a href="https://github.com/news-app-vue" target="_blank" class="text-sm text-primary hover:underline"><i class="fab fa-github mr-1"></i> GitHub源码</a>
+                    </div>
+                    <button class="detail-btn text-sm text-gray-500 hover:text-primary" data-id="2"><i class="fas fa-info-circle mr-1"></i> 详情</button>
+                </div>
+            </div>
+
+            <div class="project-card bg-white rounded-xl shadow p-6 card-hover" data-category="web" data-tech="react js">
+                <div class="h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                    <img src="86a9f5a985593038808e34044a3a9c6a.png" alt="三角州" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-semibold mb-2">三角州</h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">核心类型：硬核军事模拟FPS，1998年首作，NovaLogic开发。
+
+• 玩法：单人战役（反恐/突袭/解救人质）+多人对抗，大地图、拟真弹道、强调潜行与狙击。
+
+• 特色：无呼吸回血，高难度硬核体验，开创战术射击先河。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">射击</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">对抗</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">思路</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="https://demo.adminreact.com" target="_blank" class="text-sm text-primary hover:underline"><i class="fas fa-external-link mr-1"></i> 在线演示</a>
+                        <a href="https://github.com/react-admin-demo" target="_blank" class="text-sm text-primary hover:underline"><i class="fab fa-github mr-1"></i> GitHub源码</a>
+                    </div>
+                    <button class="detail-btn text-sm text-gray-500 hover:text-primary" data-id="3"><i class="fas fa-info-circle mr-1"></i> 详情</button>
+                </div>
+            </div>
+
+            <div class="project-card bg-white rounded-xl shadow p-6 card-hover" data-category="design" data-tech="html js">
+                <div class="h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                    <img src="fa67fe1820697b0236a87029a7815230.png" alt="消消乐" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-semibold mb-2">消消乐</h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">• 核心玩法：在限定步数或时间内，消除指定数量的目标元素（如小动物、水果），或达到对应分数、清除障碍物。
+
+• 关卡设计：包含数千个差异化关卡，随进度解锁特效道具（如火箭、炸弹）和特殊障碍（如冰块、藤蔓），提升游戏趣味性。
+
+• 操作特点：点击或滑动屏幕即可完成操作，规则简单易上手，碎片化时间即可游玩。
+
+• 社交属性：支持好友排行榜比拼、赠送体力，部分版本可邀请好友助力过关。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">闯关</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">思维</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">消掉不开心</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="https://demo.shopindex.com" target="_blank" class="text-sm text-primary hover:underline"><i class="fas fa-external-link mr-1"></i> 在线演示</a>
+                        <a href="https://github.com/shop-index-design" target="_blank" class="text-sm text-primary hover:underline"><i class="fab fa-github mr-1"></i> GitHub源码</a>
+                    </div>
+                    <button class="detail-btn text-sm text-gray-500 hover:text-primary" data-id="4"><i class="fas fa-info-circle mr-1"></i> 详情</button>
+                </div>
+            </div>
+
+            <div class="project-card bg-white rounded-xl shadow p-6 card-hover" data-category="mobile" data-tech="react js">
+                <div class="h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                    <img src="0d2d3e866a36bd95e91f70d89e9ee570.png" alt="王牌竞速" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-semibold mb-2">王牌竞速</h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">• 类型标签：赛车竞速/休闲竞技/技能竞速，支持Android/iOS，2021年上线￼￼￼。
+
+• 核心玩法：每车有专属王牌大招（加速、干扰、辅助等），漂移攒氮气充能，比赛兼顾操作与技能释放时机；单局约1分钟，节奏快。
+
+• 模式丰富：包含排位赛、组队赛、闯关模式（金币/倒计时/积分）、生涯剧情等。
+
+• 赛车与改装：100+授权真车与概念车，支持涂装、轮毂等DIY，可升级引擎/轮胎提升性能。
+
+• 实景赛道：西湖、天门山、洪崖洞等中外地标赛道，视觉沉浸感强。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">赛车与改装</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">大招</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">真实</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="https://demo.rnshop.com" target="_blank" class="text-sm text-primary hover:underline"><i class="fas fa-external-link mr-1"></i> 在线演示</a>
+                        <a href="https://github.com/rn-shop-app" target="_blank" class="text-sm text-primary hover:underline"><i class="fab fa-github mr-1"></i> GitHub源码</a>
+                    </div>
+                    <button class="detail-btn text-sm text-gray-500 hover:text-primary" data-id="5"><i class="fas fa-info-circle mr-1"></i> 详情</button>
+                </div>
+            </div>
+
+            <div class="project-card bg-white rounded-xl shadow p-6 card-hover" data-category="web design" data-tech="html vue">
+                <div class="h-48 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+                    <img src="54204f9623980bf3d1b29fcaed047646.png" alt="反恐精英" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl font-semibold mb-2">反恐精英</h3>
+                <p class="text-gray-600 mb-4 line-clamp-2">竞技模式：5v5、30局16胜，分拆弹/人质解救，有经济系统（买枪/甲/道具），败方补偿，无属性付费￼￼￼。
+
+◦ 休闲模式：规则宽松，自动回血，适合新手练手￼￼￼。
+
+◦ 其他：军备竞赛、死亡竞赛、爆破、守护模式等，玩法多元￼￼￼。
+
+• 核心机制：经济系统决定每局装备，弹道与后坐力拟真，无技能、无属性增益，纯靠枪法与战术￼￼￼。
+
+• 社区与电竞：创意工坊支持自定义地图/玩法，武器皮肤仅装饰可交易；顶级赛事如Major，奖金池高、职业化成熟￼￼￼。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">射击</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">竞赛</span>
+                    <span class="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">爆破</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="https://demo.vueblog.com" target="_blank" class="text-sm text-primary hover:underline"><i class="fas fa-external-link mr-1"></i> 在线演示</a>
+                        <a href="https://github.com/vue-personal-blog" target="_blank" class="text-sm text-primary hover:underline"><i class="fab fa-github mr-1"></i> GitHub源码</a>
+                    </div>
+                    <button class="detail-btn text-sm text-gray-500 hover:text-primary" data-id="6"><i class="fas fa-info-circle mr-1"></i> 详情</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="detailModal" class="fixed inset-0 bg-black/50 z-70 flex items-center justify-center opacity-0 invisible transition-all duration-300">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-auto p-6 relative">
+            <button id="closeModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Ming</h3>
+                    <p class="text-gray-400 mb-4">作品集</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-gitee text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-weixin text-xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">快速导航</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">首页</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-white">作品集</a></li>
+                        <li><a href="article.html" class="text-gray-400 hover:text-white">技术博客</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white">关于我</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">项目统计</h3>
+                    <p class="text-gray-400 mb-2">已完成项目：<span id="projectTotal">6</span> 个</p>
+                    <p class="text-gray-400 mb-2">Web应用：<span id="webTotal">3</span> 个</p>
+                    <p class="text-gray-400 mb-2">移动端项目：<span id="mobileTotal">2</span> 个</p>
+                    <p class="text-gray-400">课程设计：<span id="designTotal">3</span> 个</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>©许益铭 版权所有</p>
+            </div>
+        </div>
+
+        <button id="backToTop">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.remove('translate-x-full'));
+        closeMenu.addEventListener('click', () => mobileMenu.classList.add('translate-x-full'));
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const techFilter = document.getElementById('techFilter');
+        const searchInput = document.getElementById('searchInput');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        function filterProjects() {
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const activeTech = techFilter.value;
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            projectCards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const cardTech = card.dataset.tech;
+                const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+                const cardDesc = card.querySelector('p').textContent.toLowerCase();
+
+                const matchFilter = activeFilter === 'all' || cardCategory.includes(activeFilter);
+                const matchTech = activeTech === 'all' || cardTech.includes(activeTech);
+                const matchSearch = searchTerm === '' || cardTitle.includes(searchTerm) || cardDesc.includes(searchTerm);
+
+                card.classList.toggle('hidden', !(matchFilter && matchTech && matchSearch));
+            });
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active', 'bg-primary', 'text-white'));
+                btn.classList.add('active', 'bg-primary', 'text-white');
+                filterProjects();
+            });
+        });
+        techFilter.addEventListener('change', filterProjects);
+        searchInput.addEventListener('input', filterProjects);
+
+        const detailBtns = document.querySelectorAll('.detail-btn');
+        const detailModal = document.getElementById('detailModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalContent = document.getElementById('modalContent');
+
+        const projectDetails = {
+            1: {
+                title: '企业官网开发',
+                cover: 'https://picsum.photos/600/400?random=1',
+                category: 'Web应用、课程设计',
+                tech: 'HTML5、CSS3、Vue3、Tailwind CSS、Axios',
+                desc: '本项目为课程设计作品，基于Vue3开发的响应式企业官网，包含首页、产品展示、新闻动态、联系我们等6个页面。使用Tailwind CSS实现样式开发，Axios请求后端接口获取数据，页面适配PC、平板、手机等设备，同时添加了轮播、表单验证、滚动动画等交互效果。'
+            },
+            2: {
+                title: '移动端资讯App',
+                cover: 'https://picsum.photos/600/400?random=2',
+                category: '移动端',
+                tech: 'Vue3、Vant、Vue Router、Pinia、Axios',
+                desc: '使用Vue3+Vant开发的移动端资讯类小程序，实现新闻列表、新闻详情、收藏、评论、夜间模式等功能。采用Pinia进行状态管理，Vue Router实现页面路由，Axios请求第三方新闻接口获取数据，整体遵循移动端交互设计规范，适配不同尺寸的手机屏幕。'
+            },
+            3: {
+                title: 'React后台管理系统',
+                cover: 'https://picsum.photos/600/400?random=3',
+                category: 'Web应用',
+                tech: 'React、Ant Design、React Router、Redux、ECharts',
+                desc: '基于React+Ant Design开发的后台管理系统，实现用户管理、角色权限控制、数据可视化、日志管理等核心功能。使用ECharts实现饼图、柱状图等数据图表展示，Redux进行全局状态管理，Ant Design提供丰富的UI组件支持，整体采用前后端分离的开发模式。'
+            },
+            4: {
+                title: '电商首页课程设计',
+                cover: 'https://picsum.photos/600/400?random=4',
+                category: '课程设计',
+                tech: 'HTML5、CSS3、JavaScript、Swiper、Bootstrap',
+                desc: '课程设计项目，使用原生HTML/CSS/JS开发的电商首页，包含轮播图、商品分类、限时秒杀、品牌展示等模块。使用Swiper插件实现轮播效果，Bootstrap实现响应式布局，原生JavaScript实现倒计时、商品筛选等交互逻辑，页面兼容主流浏览器。'
+            },
+            5: {
+                title: 'React Native商城App',
+                cover: 'https://picsum.photos/600/400?random=5',
+                category: '移动端',
+                tech: 'React Native、Redux、React Navigation、Axios',
+                desc: '使用React Native开发的跨平台商城App，支持iOS和Android双平台运行。实现商品浏览、分类筛选、购物车管理、订单提交、用户中心等核心电商功能，使用Redux管理全局状态，React Navigation实现页面跳转，Axios请求电商接口获取数据。'
+            },
+            6: {
+                title: 'Vue个人博客开发',
+                cover: 'https://picsum.photos/600/400?random=6',
+                category: 'Web应用、课程设计',
+                tech: 'Vue3、Vue Router、Pinia、Markdown、Element Plus',
+                desc: '课程设计项目，基于Vue3开发的个人博客系统，包含文章发布、分类、标签、评论、搜索等功能。支持Markdown语法编辑文章，使用Element Plus提供UI组件，Pinia管理用户状态，项目部署在GitHub Pages平台，可通过公网访问。'
+            }
+        };
+
+        detailBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                const project = projectDetails[id];
+                modalContent.innerHTML = `
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <img src="${project.cover}" alt="${project.title}" class="w-full h-auto rounded-lg">
+                        </div>
+                        <div class="md:w-1/2">
+                            <h2 class="text-2xl font-bold mb-2">${project.title}</h2>
+                            <p class="text-gray-600 mb-4">分类：${project.category}</p>
+                            <div class="mb-4">
+                                <h4 class="font-semibold mb-2">技术栈：</h4>
+                                <p class="text-gray-600">${project.tech}</p>
+                            </div>
+                            <div class="mb-6">
+                                <h4 class="font-semibold mb-2">项目描述：</h4>
+                                <p class="text-gray-600 leading-relaxed">${project.desc}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                detailModal.classList.remove('opacity-0', 'invisible');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            detailModal.classList.add('opacity-0', 'invisible');
+            document.body.style.overflow = 'auto';
+        });
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) closeModal.click();
+        });
+
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('show', window.scrollY > 300);
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        document.getElementById('projectTotal').textContent = projectCards.length;
+        document.getElementById('webTotal').textContent = document.querySelectorAll('[data-category*="web"]').length;
+        document.getElementById('mobileTotal').textContent = document.querySelectorAll('[data-category*="mobile"]').length;
+        document.getElementById('designTotal').textContent = document.querySelectorAll('[data-category*="design"]').length;
+    </script>
+</body>
+</html>
